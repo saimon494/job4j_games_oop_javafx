@@ -7,12 +7,12 @@ import ru.job4j.chess.firuges.black.BishopBlack;
 
 public class LogicTest {
 
-    @Ignore
+//    @Test(expected = FigureNotFoundException.class)
     @Test
-    public void move()
+    public void whenCanMove()
             throws FigureNotFoundException, OccupiedCellException, ImpossibleMoveException {
         Logic logic = new Logic();
         logic.add(new BishopBlack(Cell.C1));
-        logic.move(Cell.C1, Cell.H6);
+        logic.move(Cell.C1, Cell.D2);
     }
 }
