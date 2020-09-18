@@ -12,8 +12,9 @@ public final class Logic {
         figures[index++] = figure;
     }
 
-    public void move(Cell source, Cell dest)
+    public boolean move(Cell source, Cell dest)
             throws FigureNotFoundException, ImpossibleMoveException, OccupiedCellException {
+        boolean rst = false;
         int index = findBy(source);
         if (index == -1) {
             throw new FigureNotFoundException("Figure not found");
@@ -22,13 +23,16 @@ public final class Logic {
         if (steps.length == 0) {
             throw new ImpossibleMoveException("Impossible move");
         }
-        free(steps);
-        figures[index] = figures[index].copy(dest);
+        if (free(steps)) {
+            rst = true;
+            figures[index] = figures[index].copy(dest);
+        }
+        return rst;
     }
 
-    private boolean free(Cell[] steps) throws OccupiedCellException, FigureNotFoundException {
-        for (int i = 0; i < figures.length; i++) {
-            if (findBy(steps[i]) != -1) {
+    private boolean free(Cell[] steps) throws OccupiedCellException {
+        for (Cell step : steps) {
+            if (findBy(step) != -1) {
                 throw new OccupiedCellException("Cell is occupied");
             }
         }
@@ -40,14 +44,13 @@ public final class Logic {
         index = 0;
     }
 
-    private int findBy(Cell cell) throws FigureNotFoundException {
+    private int findBy(Cell cell) {
         int rsl = -1;
         for (int index = 0; index != figures.length; index++) {
             Figure figure = figures[index];
             if (figure != null && figure.position().equals(cell)) {
                 rsl = index;
-            } else {
-                throw new FigureNotFoundException("Figure not found");
+                break;
             }
         }
         return rsl;
